@@ -1,3 +1,23 @@
 2020-07-07 13:56:10 DEBUG  proyectologin.MainProyectoLogin:13 - Usando Maven
 2020-07-07 14:01:21 DEBUG  proyectologin.MainProyectoLogin:13 - Usando Maven
 2020-07-07 14:01:21 DEBUG  proyectologin.MainProyectoLogin:17 - Usando GSON {"nombre_usuario":"Pedro","contrasenia":"atitelovoydecir"}
+2020-07-09 12:16:55 ERROR  proyectologin.MainProyectoLogin:54 - error al leeer de la base de datos
+java.sql.SQLException: Column Index out of range, 0 < 1.
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:965)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
+	at com.mysql.jdbc.ResultSetImpl.checkColumnBounds(ResultSetImpl.java:752)
+	at com.mysql.jdbc.ResultSetImpl.getInt(ResultSetImpl.java:2465)
+	at proyectologin.MainProyectoLogin.mostrarUsuario1(MainProyectoLogin.java:23)
+	at proyectologin.MainProyectoLogin.main(MainProyectoLogin.java:47)
+2020-07-09 12:17:11 ERROR  proyectologin.MainProyectoLogin:54 - error al leeer de la base de datos
+java.sql.SQLException: Column 'id' not found.
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:965)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
+	at com.mysql.jdbc.ResultSetImpl.findColumn(ResultSetImpl.java:1069)
+	at com.mysql.jdbc.ResultSetImpl.getInt(ResultSetImpl.java:2559)
+	at proyectologin.MainProyectoLogin.mostrarUsuario2(MainProyectoLogin.java:16)
+	at proyectologin.MainProyectoLogin.main(MainProyectoLogin.java:48)

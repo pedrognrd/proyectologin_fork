@@ -2,6 +2,7 @@ package proyectologin;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -61,23 +62,53 @@ public class MainProyectoLogin {
 		Statement instruccion = null;// connection.createStatement();
 		ResultSet resultSet = null;
 		Usuario usuario_aux = null;
-
-		// TODO Conectarnos a la base de datos y leer los usuarios
+		BaseDatos baseDatos = null;
+		PreparedStatement preparedStatement = null;
+		
+		/**
+		 * PreparedStatement pstmt =
+conn.prepareStatement("Select * from
+employees where employee_id = ?");
+pstmt.setInt(1, 110);
+rset = pstmt.executeQuery();
+		 */
+		
 		try {
 			lUsuarios = new ArrayList<Usuario>();
 			// 1 REGISTRAR /cargar EL DRIVER
-			DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+			baseDatos = new BaseDatos();
+			baseDatos.registrarDriver();
 			// 2 OBTENER LA CONEXIÓN
-			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hedima", "root", "nrmnct29");
-			instruccion = connection.createStatement();
+			connection = baseDatos.obtenerConexion();
+			
+			//preparedStatement = connection.prepareStatement(InstruccionesSelect.SELECCIONAR_USUARIOS_POR_ID);
+			preparedStatement = connection.prepareStatement(InstruccionesSelect.SELECCIONAR_USUARIOS_POR_ID_Y_NOMBRE);
+			int id_usuario = 5;//pedir vosotros el id al usuario de nuestro programa
+			preparedStatement.setInt(1, id_usuario);
+			preparedStatement.setString(2, "pedro");
+			
+			//TODO haced el login/ la autenticación de la aplicacion
+			//pedir al usuario su nombre y contraseña y decid si está regustrado en la base de datos o no
+			//si está registrado mostrais su id, su nombre y su contraseña
+			//si no, mostrais un mensaje de Acceso denegado
+			
+			resultSet = preparedStatement.executeQuery();
+			if (resultSet.next())
+			{
+				mostrarUsuario1 (resultSet);
+				
+			} else {
+				System.out.println("LA CONSULTA NO RECUPERÓ RESULTADOS");
+			}
+			
+		/*	
+			//instruccion = connection.createStatement();
+			
 			//resultSet = instruccion.executeQuery(InstruccionesSelect.SELECCIONAR_TODOS_USUARIOS);
 			resultSet = instruccion.executeQuery(InstruccionesSelect.SELECCIONAR_TODOS_USUARIOS_ORDEN_NOMBRE_DESC);
 			while (resultSet.next())// mientras haya filas//registros//tuplas
 			{
-				//	todo MOSTRAR TODOS LOS CAMPOS DE LA TABLA 
-				//System.out.println(resultSet.getString("nombre"));
-				//mostrarUsuario1(resultSet);
-				//mostrarUsuario2(resultSet);
+				
 				usuario_aux = generarUsuario(resultSet);
 				lUsuarios.add(usuario_aux);
 				
@@ -87,32 +118,19 @@ public class MainProyectoLogin {
 			Collections.sort(lUsuarios);
 			System.out.println("---mostrar lista ordeanda por password ---");
 			mostrarListaUsuarios(lUsuarios);
-
+*/
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 			logger.error("error al leeer de la base de datos", e);
 		} finally 
 		{
-			try {
-				resultSet.close();
-				instruccion.close();
-				connection.close();
-			} catch (Exception e) {
-				// TODO: handle exception
-				logger.error("error al liberar recursos", e);
-			}
+			//baseDatos.liberarRecursos(connection, instruccion, resultSet);
+			baseDatos.liberarRecursos(connection, preparedStatement, resultSet);
 
 		}
 
-		/*
-		 * Gson gson = new Gson(); Logger logger = Logger.getLogger("mylog");
-		 * logger.debug("Usando Maven");
-		 * 
-		 * Login login = new Login("Pedro", "atitelovoydecir"); String login_json =
-		 * gson.toJson(login); //serializar logger.debug("Usando GSON " + login_json);
-		 */
-		// TODO deserializar
+		
 
 	}
 }
