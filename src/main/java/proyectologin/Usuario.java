@@ -15,6 +15,12 @@ public class Usuario implements Comparable<Usuario>{
 		this.pwd = pwd;
 	}
 	
+	public Usuario(String nombre, String pwd) {
+		super();
+		this.nombre = nombre;
+		this.pwd = pwd;
+	}
+	
 	
 	@Override
 	public String toString() {
