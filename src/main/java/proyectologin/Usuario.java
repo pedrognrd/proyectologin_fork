@@ -1,5 +1,8 @@
 package proyectologin;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 //BEAN DE USUARIO - entity porque guarda relación con una tabla
 public class Usuario implements Comparable<Usuario>{
 	
@@ -13,6 +16,13 @@ public class Usuario implements Comparable<Usuario>{
 		this.id = id;
 		this.nombre = nombre;
 		this.pwd = pwd;
+	}
+	
+	public Usuario(ResultSet resultSet) throws SQLException {
+		super();		
+		this.nombre = resultSet.getString(2);
+		this.id = resultSet.getInt(1);
+		this.pwd = resultSet.getString(3);
 	}
 	
 	public Usuario(String nombre, String pwd) {

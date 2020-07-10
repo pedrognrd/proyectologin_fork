@@ -13,78 +13,66 @@ import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 
-
-
 public class MainProyectoLogin {
-	
+
 	private Logger logger = Logger.getLogger("mylog");
-	
-	private static void mostrarUsuario2 (ResultSet resultSet) throws SQLException
-	{
-		System.out.println("Nombre = " +resultSet.getString("nombre"));
+
+	private static void mostrarUsuario2(ResultSet resultSet) throws SQLException {
+		System.out.println("Nombre = " + resultSet.getString("nombre"));
 		System.out.println("ID = " + resultSet.getInt("idusuarios"));
-		System.out.println("Contrasenia  = "  +resultSet.getString("password"));
+		System.out.println("Contrasenia  = " + resultSet.getString("password"));
 	}
-	
-	private static void mostrarUsuario1 (ResultSet resultSet) throws SQLException
-	{
-		System.out.println("Nombre = " +resultSet.getString(2));
+
+	private static void mostrarUsuario1(ResultSet resultSet) throws SQLException {
+		System.out.println("Nombre = " + resultSet.getString(2));
 		System.out.println("ID = " + resultSet.getInt(1));
-		System.out.println("Contrasenia  = "  +resultSet.getString(3));
+		System.out.println("Contrasenia  = " + resultSet.getString(3));
 	}
-	//TODO GENERAR UNA LISTA DE USUARIOS A PARTIR DE LA CONSULTA REALIZADA
-	
-	private static Usuario generarUsuario (ResultSet resultSet) throws SQLException
-	{
+	// TODO GENERAR UNA LISTA DE USUARIOS A PARTIR DE LA CONSULTA REALIZADA
+
+	private static Usuario generarUsuario(ResultSet resultSet) throws SQLException {
 		Usuario usuario = null;
 		String nombre = null;
 		String pass = null;
 		int id = 0;
-		
-			nombre = resultSet.getString(2);
-			id = resultSet.getInt(1);
-			pass = resultSet.getString(3);
-			usuario = new Usuario(id, nombre, pass);
-			
+
+		nombre = resultSet.getString(2);
+		id = resultSet.getInt(1);
+		pass = resultSet.getString(3);
+		usuario = new Usuario(id, nombre, pass);
+
 		return usuario;
 	}
-	
-	private static void mostrarListaUsuarios (List<Usuario> lUsuarios)
-	{
-		for (Usuario u : lUsuarios)
-		{
+
+	private static void mostrarListaUsuarios(List<Usuario> lUsuarios) {
+		for (Usuario u : lUsuarios) {
 			System.out.println(u.toString());
 		}
-		//System.out.println(lUsuarios);
+		// System.out.println(lUsuarios);
 	}
-	
-	public static String pedirNombre ()
-	{
+
+	public static String pedirNombre() {
 		String nombre = null;
 		Scanner scaner = null;
-		
-			
-			System.out.println("Intro nombre:");
-			scaner = new Scanner(System.in);
-			nombre = scaner.next();
-			
+
+		System.out.println("Intro nombre:");
+		scaner = new Scanner(System.in);
+		nombre = scaner.next();
+
 		return nombre;
 	}
-	
-	public static String pedirPwd ()
-	{
+
+	public static String pedirPwd() {
 		String pwd = null;
 		Scanner scaner = null;
-		
-			
-			System.out.println("Introduce pwd:");
-			scaner = new Scanner(System.in);
-			pwd = scaner.next();
-			
+
+		System.out.println("Introduce pwd:");
+		scaner = new Scanner(System.in);
+		pwd = scaner.next();
+
 		return pwd;
 	}
-	
-	
+
 	private static void mostrarMenu() {
 
 		System.out.println("1. CONSULTAR TODOS LOS USUARIOS");
@@ -94,10 +82,9 @@ public class MainProyectoLogin {
 		System.out.println("5. SALIR.");
 		System.out.println("");// para que nos deje un salto en blanco
 		System.out.println("Introduzca opción: ");
-		
+
 	}
 
-	
 	/**
 	 * Método que lee la opción introducida por teclado
 	 * 
@@ -113,12 +100,15 @@ public class MainProyectoLogin {
 
 		return opcion_introducida;
 	}
+
 	public static void main(String[] args) {
 
 		int opcion;
-	
+
+		// Al crear la clase, se ejecuta automáticamente el código "static{}" de
+		// BaseDatos.java
 		BaseDatos baseDatos = new BaseDatos();
-		
+
 		do {
 
 			// 1 mostramos el menú
@@ -127,23 +117,39 @@ public class MainProyectoLogin {
 			opcion = leerOpcion();
 			// 3 casos: hacemos los caminos para cada elección del usuario
 			switch (opcion) {
-			case 1:
-				
-				 break;
-
-			case 2:
-				
-				
-				break;
-			case 3:
-				
-				break;
-			case 4:
-				
+			case 1: // TOD CONSULTAR TODOS LOS USUARIOS
+				// Haremos u so del método
+				List<Usuario> lu = baseDatos.obtenerListaUsuarios();
+				for (Usuario u : lu) {
+					System.out.println(u);
+				}
 
 				break;
-			case 5:
-				
+
+			case 2: // LOGIN
+				String nombre = pedirNombre();
+				String pwd = pedirPwd();
+				try {
+					Usuario u = baseDatos.login(nombre, pwd);
+
+					if (u != null) {
+						System.out.println(u);
+					} else {
+						System.out.println("Usuario incorrecto: nombre o pwd erróneo");
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+				break;
+			case 3: // TODO INSERTAR
+
+				break;
+			case 4: // TODO BORRAR USUARIO POR ID
+
+				break;
+			case 5: // SALIR
+
 				System.out.println("Quiere salir");
 
 				break;
@@ -154,8 +160,6 @@ public class MainProyectoLogin {
 			}
 
 		} while (opcion != 7);
-		
-		
 
 	}
 }
