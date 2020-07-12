@@ -18,24 +18,24 @@ public class Usuario implements Comparable<Usuario>{
 		this.pwd = pwd;
 	}
 	
-	public Usuario(ResultSet resultSet) throws SQLException {
-		super();		
-		this.nombre = resultSet.getString(2);
-		this.id = resultSet.getInt(1);
-		this.pwd = resultSet.getString(3);
-	}
-	
 	public Usuario(String nombre, String pwd) {
 		super();
 		this.nombre = nombre;
 		this.pwd = pwd;
 	}
 	
+	public Usuario(ResultSet resultSet) throws SQLException {
+		super();		
+		this.id = resultSet.getInt(1);
+		this.nombre = resultSet.getString(2);
+		this.pwd = resultSet.getString(3);
+	}
+	
 	
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "ID = " + this.id  +" NOMBRE = "+ this.nombre + " PASS " + this.pwd;
+		return "ID = " + this.id  +" NOMBRE = "+ this.nombre + " PASS " + this.pwd + "\n";
 	}
 	
 	public int getId() {
@@ -71,7 +71,4 @@ public class Usuario implements Comparable<Usuario>{
 		
 		return resultado;
 	}
-	
-	
-
 }

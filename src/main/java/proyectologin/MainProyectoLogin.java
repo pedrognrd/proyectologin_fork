@@ -13,6 +13,8 @@ import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 
+import sun.util.logging.resources.logging;
+
 public class MainProyectoLogin {
 
 	private Logger logger = Logger.getLogger("mylog");
@@ -51,6 +53,17 @@ public class MainProyectoLogin {
 		// System.out.println(lUsuarios);
 	}
 
+	public static int pedirId() {
+		int id = 0;
+		Scanner scaner = null;
+
+		System.out.println("Intro id:");
+		scaner = new Scanner(System.in);
+		id = scaner.nextInt();
+
+		return id;
+	}
+	
 	public static String pedirNombre() {
 		String nombre = null;
 		Scanner scaner = null;
@@ -101,7 +114,7 @@ public class MainProyectoLogin {
 		return opcion_introducida;
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 
 		int opcion;
 
@@ -123,7 +136,7 @@ public class MainProyectoLogin {
 				for (Usuario u : lu) {
 					System.out.println(u);
 				}
-
+				System.out.println("\n");
 				break;
 
 			case 2: // LOGIN
@@ -143,10 +156,47 @@ public class MainProyectoLogin {
 
 				break;
 			case 3: // TODO INSERTAR
-
+				boolean insertar_usuario = false;
+				String nombre_nuevo = pedirNombre();
+				String pwd_nuevo = pedirPwd();
+				Usuario usuario_nuevo = new Usuario(nombre_nuevo, pwd_nuevo);
+				
+				try {
+					insertar_usuario = baseDatos.insertarUsuario(usuario_nuevo);
+					System.out.println("usuario_nuevo vale " + usuario_nuevo);
+					
+					if (insertar_usuario) {
+						System.out.println("Usuario creado con éxito\n");
+					} else {
+						System.out.println("Error al crear usuario\n");
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				
 				break;
 			case 4: // TODO BORRAR USUARIO POR ID
-
+				int id_elimina = 0;
+				boolean eliminar_usuario = false;
+				List<Usuario> lu2 = baseDatos.obtenerListaUsuarios();
+				for (Usuario u : lu2) {
+					System.out.println(u);
+				}
+				System.out.println("Elija el ID del usuario a eliminar\n");
+				id_elimina = pedirId();
+				System.out.println("id_elimina vale " + id_elimina);
+				
+				try {
+					eliminar_usuario = baseDatos.borrarUsuario(id_elimina);					
+					if (eliminar_usuario) {
+						System.out.println("Usuario eliminado con éxito\n");
+					} else {
+						System.out.println("Error al eliminar usuario\n");
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				break;
 			case 5: // SALIR
 

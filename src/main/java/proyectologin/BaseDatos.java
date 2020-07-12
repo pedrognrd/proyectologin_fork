@@ -81,14 +81,6 @@ public class BaseDatos {
 		return lu;
 	}
 
-	public boolean insertarUsuario(Usuario u) {
-		return false;
-	}
-
-	public boolean borrarUsuario(int id) {
-		return false;
-	}
-
 	/**
 	 * Método que consulta el usuario de la base de datos
 	 * 
@@ -100,9 +92,10 @@ public class BaseDatos {
 	 */
 	public Usuario login(String nombre, String pwd) throws SQLException {
 		Usuario usuario = null;
-		PreparedStatement ps = null;
 		Connection connection = null;
+		PreparedStatement ps = null;
 		ResultSet rs = null;
+		int id_user = 0;
 
 		// tengo que hacer la consulta
 		// 1 pillo conexión
@@ -113,7 +106,10 @@ public class BaseDatos {
 			ps.setString(2, pwd);
 			rs = ps.executeQuery();
 			if (rs.next()) {
-				usuario = new Usuario(nombre, pwd);
+				// Capturamos el id del usuario que ha hecho login
+				id_user = rs.getInt(1);
+				//System.out.println("id_user vale " + id_user);
+				usuario = new Usuario(id_user, nombre, pwd);
 			}
 
 		} catch (Exception e) {
@@ -125,6 +121,56 @@ public class BaseDatos {
 		}
 
 		return usuario;
+	}
+	
+	public boolean insertarUsuario(Usuario u) throws Exception {
+		boolean usuario_creado = false;	
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+			connection = this.obtenerConexion();
+			ps = connection.prepareStatement(InstruccionesSelect.INSERTAR_USUARIO);
+			ps.setString(1, u.getNombre());
+			ps.setString(2, u.getPwd());
+			// No consigo capturar en rs el update de la ddbb
+			ps.executeUpdate();
+			usuario_creado = true;
+			/*if (rs.next()) {
+				usuario_creado = true;
+			}*/
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			liberarRecursos(connection, ps, rs);
+		}
+		
+		return usuario_creado;
+	}
+
+	public boolean borrarUsuario(int id) throws Exception {
+		boolean usuario_eliminado = false;
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+			connection = this.obtenerConexion();
+			ps = connection.prepareStatement(InstruccionesSelect.ELIMINA_USUARIO);
+			ps.setInt(1, id);
+			// No consigo capturar en rs el update de la ddbb
+			ps.execute();
+			usuario_eliminado = true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			liberarRecursos(connection, ps, rs);
+		}
+		return usuario_eliminado;
 	}
 
 }
