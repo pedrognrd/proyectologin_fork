@@ -9,4 +9,5 @@ public class InstruccionesSelect {
 	public final static  String LOGIN_USUARIOS = "SELECT * FROM hedima.usuarios WHERE nombre = ? AND password = ?;";
 	public final static  String INSERTAR_USUARIO = "INSERT INTO hedima.usuarios(nombre, password) VALUES(?,?)";
 	public final static  String ELIMINA_USUARIO = "DELETE FROM hedima.usuarios WHERE id = ?;";
+	public final static  String SELECCIONAR_USUARIOS_POR_NOMBRE= "SELECT * FROM hedima.usuarios WHERE nombre LIKE ?;";
 }

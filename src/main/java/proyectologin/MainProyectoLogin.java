@@ -63,7 +63,7 @@ public class MainProyectoLogin {
 
 		return id;
 	}
-	
+
 	public static String pedirNombre() {
 		String nombre = null;
 		Scanner scaner = null;
@@ -92,7 +92,8 @@ public class MainProyectoLogin {
 		System.out.println("2. LOGIN USUARIO");
 		System.out.println("3. INSERTAR UN USUARIO NUEVO");
 		System.out.println("4. BORRAR UN USUARIO POR SU ID");
-		System.out.println("5. SALIR.");
+		System.out.println("5. BUSCAR POR NOMBRE");
+		System.out.println("6. SALIR.");
 		System.out.println("");// para que nos deje un salto en blanco
 		System.out.println("Introduzca opción: ");
 
@@ -108,8 +109,9 @@ public class MainProyectoLogin {
 		Scanner scanner = null;// variable que necesito para leer de teclado
 
 		scanner = new Scanner(System.in);//
-		opcion_introducida = scanner.nextInt();// suponemos que introduce un número. no valildamos! (si mete una letra
-												// petaría y el programa acabaría de forma abrupta)
+		opcion_introducida = scanner.nextInt();
+		// suponemos que introduce un número. no valildamos! (si mete una letra
+		// petaría y el programa acabaría de forma abrupta)
 
 		return opcion_introducida;
 	}
@@ -136,7 +138,7 @@ public class MainProyectoLogin {
 				for (Usuario u : lu) {
 					System.out.println(u);
 				}
-				System.out.println("\n");
+				// System.out.println("\n");
 				break;
 
 			case 2: // LOGIN
@@ -160,11 +162,11 @@ public class MainProyectoLogin {
 				String nombre_nuevo = pedirNombre();
 				String pwd_nuevo = pedirPwd();
 				Usuario usuario_nuevo = new Usuario(nombre_nuevo, pwd_nuevo);
-				
+
 				try {
 					insertar_usuario = baseDatos.insertarUsuario(usuario_nuevo);
 					System.out.println("usuario_nuevo vale " + usuario_nuevo);
-					
+
 					if (insertar_usuario) {
 						System.out.println("Usuario creado con éxito\n");
 					} else {
@@ -173,8 +175,7 @@ public class MainProyectoLogin {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				
-				
+
 				break;
 			case 4: // TODO BORRAR USUARIO POR ID
 				int id_elimina = 0;
@@ -186,9 +187,9 @@ public class MainProyectoLogin {
 				System.out.println("Elija el ID del usuario a eliminar\n");
 				id_elimina = pedirId();
 				System.out.println("id_elimina vale " + id_elimina);
-				
+
 				try {
-					eliminar_usuario = baseDatos.borrarUsuario(id_elimina);					
+					eliminar_usuario = baseDatos.borrarUsuario(id_elimina);
 					if (eliminar_usuario) {
 						System.out.println("Usuario eliminado con éxito\n");
 					} else {
@@ -198,7 +199,21 @@ public class MainProyectoLogin {
 					e.printStackTrace();
 				}
 				break;
-			case 5: // SALIR
+			case 5: // BUSCAR POR NOMBRE
+				System.out.println("Inserte una letra para buscar por nombre");
+				String nombre_buscar = pedirNombre();
+				List<Usuario> lu3 = baseDatos.buscarUsuarioPorNombre(nombre_buscar);
+
+				if (lu3.size()!=0) {
+					for (Usuario u : lu3) {
+						System.out.println(u);
+					}
+				} else {
+					System.out.println("No hay ningún usuario con ese nombre");
+				}
+				
+				break;
+			case 6: // SALIR
 
 				System.out.println("Quiere salir");
 
@@ -209,7 +224,7 @@ public class MainProyectoLogin {
 				break;
 			}
 
-		} while (opcion != 7);
+		} while (opcion != 5);
 
 	}
 }
